@@ -1,6 +1,6 @@
 ﻿namespace mvvmFirstProject.Model
 {
-    class City
+    public class City
     {
         public int Version { get; set; }
         public string Key { get; set; }
