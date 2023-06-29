@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using mvvmFirstProject.Model;
+using System.ComponentModel;
 
 namespace mvvmFirstProject.ViewModel
 {
@@ -14,6 +15,30 @@ namespace mvvmFirstProject.ViewModel
                 OnPropertyChanged("Query");
             }
         }
+
+        private CurrentCondition currentCondition;
+
+        public CurrentCondition CurrentCondition
+        {
+            get { return currentCondition; }
+            set { 
+                currentCondition = value;
+                OnPropertyChanged("CurrentCondition");
+            }
+        }
+
+        private City selectedCity;
+
+        public City SelectedCity
+        {
+            get { return selectedCity; }
+            set { 
+                selectedCity = value;
+                OnPropertyChanged("SelectedCity");
+            }
+        }
+
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;
