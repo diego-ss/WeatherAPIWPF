@@ -38,11 +38,31 @@ namespace mvvmFirstProject.ViewModel
             }
         }
 
+        public WeatherViewModel()
+        {
+            // só mostra no design, não na aplicação rodando
+            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                SelectedCity = new City
+                {
+                    LocalizedName = "New York"
+                };
 
-
+                CurrentCondition = new CurrentCondition
+                {
+                    WeatherText = "Partly cloudy",
+                    Temperature = new Temperature
+                    {
+                        Metric = new Units
+                        {
+                            Value = 21
+                        }
+                    }
+                };
+            }     
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
