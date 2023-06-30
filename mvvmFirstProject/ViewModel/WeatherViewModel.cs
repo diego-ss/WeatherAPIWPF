@@ -1,8 +1,8 @@
 ﻿using mvvmFirstProject.Model;
+using mvvmFirstProject.ViewModel.Commands;
 using mvvmFirstProject.ViewModel.Helpers;
-using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 
 namespace mvvmFirstProject.ViewModel
 {
@@ -37,9 +37,18 @@ namespace mvvmFirstProject.ViewModel
             get { return selectedCity; }
             set { 
                 selectedCity = value;
-                OnPropertyChanged("SelectedCity");
+
+                if(selectedCity != null)
+                {
+                    OnPropertyChanged("SelectedCity");
+                    GetCurrentConditions();
+                }
             }
         }
+
+        public ObservableCollection<City> Cities { get; set; }
+
+        public SearchCommand SearchCommand { get; set; }
 
         public WeatherViewModel()
         {
@@ -58,18 +67,34 @@ namespace mvvmFirstProject.ViewModel
                     {
                         Metric = new Units
                         {
-                            Value = 21
+                            Value = "21"
                         }
                     }
                 };
-            }     
+            }
+
+            SearchCommand = new SearchCommand(this);
+            Cities = new ObservableCollection<City>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public async void MakeQuery()
         {
-            var cities = await AccuWeatherHelper.GetCities(Query);
+            var retrievedCities = await AccuWeatherHelper.GetCities(Query);
+            Cities.Clear();
+            retrievedCities.ForEach(city =>
+            {
+                Cities.Add(city);
+            });
+            
+        }
+
+        private async void GetCurrentConditions()
+        {
+            Query = string.Empty;
+            CurrentCondition = await AccuWeatherHelper.GetCurrentCondition(SelectedCity.Key);
+            Cities.Clear();
         }
 
         private void OnPropertyChanged(string propertyName)

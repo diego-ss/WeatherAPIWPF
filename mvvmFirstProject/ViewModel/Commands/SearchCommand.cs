@@ -6,7 +6,12 @@ namespace mvvmFirstProject.ViewModel.Commands
     public class SearchCommand : ICommand
     {
         private WeatherViewModel WeatherViewModel { get; set; }
-        public event EventHandler CanExecuteChanged;
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove {  CommandManager.RequerySuggested -= value; }
+        }
 
         public SearchCommand(WeatherViewModel weatherViewModel)
         {
@@ -14,6 +19,11 @@ namespace mvvmFirstProject.ViewModel.Commands
         }
         public bool CanExecute(object parameter)
         {
+            string query = parameter as string;
+
+            if (string.IsNullOrEmpty(query))
+                return false;
+
             return true;
         }
 
